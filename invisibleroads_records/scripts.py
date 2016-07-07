@@ -1,6 +1,6 @@
 import transaction
-from importlib import import_module
 from invisibleroads.scripts import ConfigurableScript
+from invisibleroads_macros.configuration import resolve_attribute
 from pyramid.paster import bootstrap, setup_logging
 
 from .models import Base
@@ -14,17 +14,12 @@ class RecordsScript(ConfigurableScript):
     def run(self, args):
         setup_logging(args.configuration_path)
         env = bootstrap(args.configuration_path)
-        settings = env['registry'].settings
-        if 'sqlalchemy.url' not in settings:
-            return
         Base.metadata.create_all()
-        setting_value = settings.get(
+        function_spec = env['registry'].settings.get(
             'records.' + self.setting_name, '').strip()
-        if not setting_value:
+        if not function_spec:
             return
-        module_url, function_name = setting_value.rsplit('.', 1)
-        module = import_module(module_url)
-        function = getattr(module, function_name)
+        function = resolve_attribute(function_spec)
         function(env['request'])
         transaction.commit()
 
