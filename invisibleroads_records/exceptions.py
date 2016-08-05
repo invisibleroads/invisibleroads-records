@@ -1,0 +1,2 @@
+class InvisibleRoadsRecordsError(Exception):
+    pass
