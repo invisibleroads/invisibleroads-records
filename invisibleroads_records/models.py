@@ -18,12 +18,10 @@ def get_unique_instance(Class, id_length=16, retry_count=3):
     count = 0
     while count < retry_count:
         instance = Class(id=make_random_string(id_length))
-        print instance.id
         try:
             db.add(instance)
             db.flush()
         except IntegrityError as e:
-            print e
             db.rollback()
         else:
             break
