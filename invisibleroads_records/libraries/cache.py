@@ -25,9 +25,9 @@ class CachingQuery(Query):
 
     def expunge_result(self, value):
         vs = []
-        db = self.session
+        DATABASE = self.session
         for v in value:
-            db.expunge(v)
+            DATABASE.expunge(v)
             vs.append(v)
         return iter(vs)
 
@@ -47,8 +47,8 @@ class CachingQuery(Query):
 
     def __iter__(self):
         if hasattr(self, '_from_cache'):
-            make_value = lambda: list(super(CachingQuery, self).__iter__())
-            return self.get_value(make_value)
+            return self.get_value(lambda: list(super(
+                CachingQuery, self).__iter__()))
         else:
             return super(CachingQuery, self).__iter__()
 
