@@ -25,9 +25,8 @@ class CachingQuery(Query):
 
     def expunge_result(self, value):
         vs = []
-        DATABASE = self.session
         for v in value:
-            DATABASE.expunge(v)
+            self.session.expunge(v)
             vs.append(v)
         return iter(vs)
 

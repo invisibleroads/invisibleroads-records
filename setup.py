@@ -41,5 +41,7 @@ setup(
     ],
     tests_require=[
         'pytest',
+        'pytest-cov',
+        'webtest',
     ],
     entry_points=ENTRY_POINTS)
