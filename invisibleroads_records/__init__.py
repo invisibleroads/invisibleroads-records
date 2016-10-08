@@ -10,10 +10,8 @@ from .libraries.cache import CachingQuery, SQLALCHEMY_CACHE
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())
-DATABASE_CONNECTION_ERROR_MESSAGE = """\
-could not access database
+DATABASE_ERROR_MESSAGE = """%s
 
-Is the database server running?
 Did you run the initialization script?
 
 invisibleroads initialize development.ini
@@ -53,5 +51,5 @@ def get_database_session(database_engine, transaction_manager):
 def handle_database_connection_error(context, request):
     response = request.response
     response.status_int = 500
-    LOG.error(DATABASE_CONNECTION_ERROR_MESSAGE)
+    LOG.error(DATABASE_ERROR_MESSAGE % context)
     return response
