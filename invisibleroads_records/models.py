@@ -49,10 +49,11 @@ class InstanceMixin(object):
     def get_from(Class, request):
         matchdict = request.matchdict
         database = request.database
-        instance_id = matchdict[Class.__tablename__ + '_id']
+        key = Class.__tablename__ + '_id'
+        instance_id = matchdict[key]
         instance = Class.get(instance_id, database)
         if not instance:
-            raise HTTPNotFound({'id': 'bad'})
+            raise HTTPNotFound({key: 'bad'})
         return instance
 
     @classmethod
