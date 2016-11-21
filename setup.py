@@ -37,7 +37,7 @@ setup(
         'zope.sqlalchemy',
     ] + [
         'dogpile.cache',
-        'invisibleroads-posts>=0.5.0',
+        'invisibleroads-posts>=0.5.2',
     ],
     tests_require=[
         'pytest',
