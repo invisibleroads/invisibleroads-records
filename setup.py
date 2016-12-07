@@ -41,7 +41,6 @@ setup(
     install_requires=[
         'pyramid-tm',
         'SQLAlchemy',
-        'transaction',
         'zope.sqlalchemy',
     ] + [
         'dogpile.cache',
