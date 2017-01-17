@@ -21,19 +21,19 @@ metadata = MetaData(naming_convention=NAMING_CONVENTION)
 Base = declarative_base(metadata=metadata)
 
 
-class InstanceMixin(object):
+class RecordMixin(object):
 
     id = Column(String, primary_key=True, autoincrement=False)
     id_length = 32
 
     @classmethod
-    def make_unique_instance(Class, database, id_length=None, retry_count=3):
+    def make_unique_record(Class, database, id_length=None, retry_count=3):
         count = 0
         id_length = id_length or Class.id_length
         while count < retry_count:
-            instance = Class(id=make_random_string(id_length))
+            record = Class(id=make_random_string(id_length))
             try:
-                database.add(instance)
+                database.add(record)
                 database.flush()
             except IntegrityError:
                 database.rollback()
@@ -42,44 +42,44 @@ class InstanceMixin(object):
             count += 1
         else:
             raise InvisibleRoadsRecordsError(
-                'could not get unique instance (%s)' % Class.__tablename__)
-        return instance
+                'could not get unique record (%s)' % Class.__tablename__)
+        return record
 
     @classmethod
     def get_from(Class, request):
         matchdict = request.matchdict
         database = request.database
         key = Class.__tablename__ + '_id'
-        instance_id = matchdict[key]
-        instance = Class.get(instance_id, database)
-        if not instance:
+        record_id = matchdict[key]
+        record = Class.get(record_id, database)
+        if not record:
             raise HTTPNotFound({key: 'bad'})
-        return instance
+        return record
 
     @classmethod
-    def get(Class, instance_id, database):
-        return database.query(Class).get(instance_id)
+    def get(Class, record_id, database):
+        return database.query(Class).get(record_id)
 
     def __repr__(self):
         return '<%s(id=%s)>' % (self.__class__.__name__, self.id)
 
 
-class CachedInstanceMixin(InstanceMixin):
+class CachedRecordMixin(RecordMixin):
 
     @classmethod
-    def get(Class, instance_id, database):
-        if not instance_id:
+    def get(Class, record_id, database):
+        if not record_id:
             return
-        return Class._make_cache_query(instance_id, database).get(instance_id)
+        return Class._make_cache_query(record_id, database).get(record_id)
 
     @classmethod
-    def clear_from_cache(Class, instance_id, database):
-        Class._make_cache_query(instance_id, database).invalidate()
+    def clear_from_cache(Class, record_id, database):
+        Class._make_cache_query(record_id, database).invalidate()
 
     @classmethod
-    def _make_cache_query(Class, instance_id, database):
+    def _make_cache_query(Class, record_id, database):
         return database.query(Class).options(
-            FromCache(cache_key='%s.id=%s' % (Class.__name__, instance_id)))
+            FromCache(cache_key='%s.id=%s' % (Class.__name__, record_id)))
 
     def update(self, database):
         database.add(self)
