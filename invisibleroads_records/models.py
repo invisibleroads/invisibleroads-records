@@ -46,22 +46,19 @@ class RecordMixin(object):
         return record
 
     @classmethod
-    def get_from(Class, request, options=None):
+    def get_from(Class, request):
         matchdict = request.matchdict
         database = request.database
         key = Class.__tablename__ + '_id'
         record_id = matchdict[key]
-        record = Class.get(record_id, database, options)
+        record = Class.get(record_id, database)
         if not record:
             raise HTTPNotFound({key: 'bad'})
         return record
 
     @classmethod
-    def get(Class, record_id, database, options=None):
-        query = database.query(Class)
-        if options:
-            query = query.options(options)
-        return query.get(record_id)
+    def get(Class, record_id, database):
+        return database.query(Class).get(record_id)
 
     def __repr__(self):
         return '<%s(id=%s)>' % (self.__class__.__name__, self.id)
