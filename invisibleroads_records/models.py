@@ -46,18 +46,19 @@ class RecordMixin(object):
         return record
 
     @classmethod
-    def get_from(Class, request):
-        matchdict = request.matchdict
-        database = request.database
+    def get_from(Class, request, record_id=None):
         key = Class.__tablename__ + '_id'
-        record_id = matchdict[key]
-        record = Class.get(record_id, database)
+        if not record_id:
+            matchdict = request.matchdict
+            record_id = matchdict[key]
+        database = request.database
+        record = Class.get(database, record_id)
         if not record:
             raise HTTPNotFound({key: 'bad'})
         return record
 
     @classmethod
-    def get(Class, record_id, database):
+    def get(Class, database, record_id):
         return database.query(Class).get(record_id)
 
     def __repr__(self):
@@ -67,20 +68,18 @@ class RecordMixin(object):
 class CachedRecordMixin(RecordMixin):
 
     @classmethod
-    def get(Class, record_id, database):
-        if not record_id:
-            return
-        return Class._make_cache_query(record_id, database).get(record_id)
+    def get(Class, database, record_id):
+        return Class.query_cache(database, record_id).get(record_id)
 
     @classmethod
-    def clear_from_cache(Class, record_id, database):
-        Class._make_cache_query(record_id, database).invalidate()
+    def clear_cache(Class, database, record_id):
+        Class.query_cache(database, record_id).invalidate()
 
     @classmethod
-    def _make_cache_query(Class, record_id, database):
-        return database.query(Class).options(
-            FromCache(cache_key='%s.id=%s' % (Class.__name__, record_id)))
+    def query_cache(Class, database, record_id):
+        return database.query(Class).options(FromCache(cache_key='%s.id=%s' % (
+            Class.__name__, record_id)))
 
     def update(self, database):
         database.add(self)
-        self.__class__.clear_from_cache(self.id, database)
+        self.__class__.clear_cache(database, self.id)

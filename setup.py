@@ -20,7 +20,7 @@ for command in ('register', 'upload'):
 
 setup(
     name='invisibleroads-records',
-    version='0.3.1',
+    version='0.4.0',
     description='Database functionality',
     long_description=DESCRIPTION,
     classifiers=[
