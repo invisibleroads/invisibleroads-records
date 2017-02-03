@@ -69,6 +69,8 @@ class CachedRecordMixin(RecordMixin):
 
     @classmethod
     def get(Class, database, record_id):
+        if record_id is None:
+            return
         return Class.query_cache(database, record_id).get(record_id)
 
     @classmethod
