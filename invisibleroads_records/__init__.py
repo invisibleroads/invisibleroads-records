@@ -29,9 +29,8 @@ def configure_database(config):
     if 'sqlalchemy.url' not in settings:
         raise KeyError('sqlalchemy.url')
     database_engine = engine_from_config(settings, 'sqlalchemy.')
-    config.add_request_method(
-        lambda request: get_database_session(database_engine, request.tm),
-        'database', reify=True)
+    config.add_request_method(lambda request: get_database_session(
+        database_engine, request.tm), 'database', reify=True)
     config.include('pyramid_tm')
 
 
