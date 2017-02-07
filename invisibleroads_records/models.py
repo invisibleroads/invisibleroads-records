@@ -1,15 +1,20 @@
+import arrow
+import datetime
 from invisibleroads_macros.security import make_random_string
 from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.schema import MetaData
-from sqlalchemy.types import String
+from sqlalchemy.types import DateTime, String
+from zope.sqlalchemy import register as register_transaction_manager
 
 from .exceptions import InvisibleRoadsRecordsError
-from .libraries.cache import FromCache
+from .libraries.cache import CachingQuery, FromCache
 
 
+CLASS_REGISTRY = {}
 NAMING_CONVENTION = {
     'ix': 'ix_%(column_0_label)s',
     'uq': 'uq_%(table_name)s_%(column_0_name)s',
@@ -18,7 +23,7 @@ NAMING_CONVENTION = {
     'pk': 'pk_%(table_name)s',
 }
 metadata = MetaData(naming_convention=NAMING_CONVENTION)
-Base = declarative_base(metadata=metadata)
+Base = declarative_base(class_registry=CLASS_REGISTRY, metadata=metadata)
 
 
 class RecordMixin(object):
@@ -85,3 +90,21 @@ class CachedRecordMixin(RecordMixin):
     def update(self, database):
         database.add(self)
         self.__class__.clear_cache(database, self.id)
+
+
+class CreationMixin(object):
+
+    creation_datetime = Column(DateTime, default=datetime.datetime.utcnow)
+
+    @property
+    def creation_when(self):
+        return arrow.get(self.creation_datetime).humanize()
+
+
+def get_database_session(database_engine, transaction_manager):
+    DatabaseSession = sessionmaker(query_cls=CachingQuery)
+    DatabaseSession.configure(bind=database_engine)
+    database_session = DatabaseSession()
+    register_transaction_manager(
+        database_session, transaction_manager=transaction_manager)
+    return database_session

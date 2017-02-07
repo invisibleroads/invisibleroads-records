@@ -7,6 +7,8 @@ ENTRY_POINTS = """
 [invisibleroads]
 initialize = invisibleroads_records.scripts:InitializeRecordsScript
 update = invisibleroads_records.scripts:UpdateRecordsScript
+[paste.app_factory]
+main = invisibleroads_records:main
 """
 FOLDER = dirname(abspath(__file__))
 DESCRIPTION = '\n\n'.join(open(join(FOLDER, x)).read().strip() for x in [
@@ -43,12 +45,12 @@ setup(
         'SQLAlchemy',
         'zope.sqlalchemy',
     ] + [
+        'arrow',
         'dogpile.cache',
-        'invisibleroads-posts>=0.5.2',
+        'invisibleroads-posts>=0.5.3',
+        'pytest',
     ],
     tests_require=[
-        'pytest',
         'pytest-cov',
-        'webtest',
     ],
     entry_points=ENTRY_POINTS)
