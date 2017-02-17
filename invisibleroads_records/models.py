@@ -1,5 +1,5 @@
 import arrow
-import datetime
+from datetime import datetime
 from invisibleroads_macros.security import make_random_string
 from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy import Column
@@ -94,7 +94,7 @@ class CachedRecordMixin(RecordMixin):
 
 class CreationMixin(object):
 
-    creation_datetime = Column(DateTime, default=datetime.datetime.utcnow)
+    creation_datetime = Column(DateTime, default=datetime.utcnow)
 
     @property
     def creation_when(self):
