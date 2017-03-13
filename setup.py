@@ -47,7 +47,7 @@ setup(
     ] + [
         'arrow',
         'dogpile.cache',
-        'invisibleroads-posts>=0.5.4.1',
+        'invisibleroads-posts>=0.5.4.2',
         'pytest',
     ],
     tests_require=[
