@@ -33,8 +33,9 @@ class CachingQuery(Query):
     @property
     def _cache_key(self):
         if not hasattr(self, '__cache_key'):
-            cache_key = self._from_cache.cache_key
-            self.__cache_key = cache_key or self._make_cache_key()
+            self.__cache_key = (
+                self._from_cache.cache_key or self._make_cache_key()
+            ).encode('utf-8')
         return self.__cache_key
 
     def _make_cache_key(self):
