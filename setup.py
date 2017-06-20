@@ -22,7 +22,7 @@ for command in ('register', 'upload'):
 
 setup(
     name='invisibleroads-records',
-    version='0.4.0',
+    version='0.4.1',
     description='Database functionality',
     long_description=DESCRIPTION,
     classifiers=[
@@ -47,7 +47,7 @@ setup(
     ] + [
         'arrow',
         'dogpile.cache',
-        'invisibleroads-posts>=0.5.4.2',
+        'invisibleroads-posts>=0.5.5',
         'pytest',
     ],
     tests_require=[
