@@ -1,5 +1,5 @@
-import logging
 from invisibleroads_macros.iterable import set_default
+from invisibleroads_macros.log import get_log
 from sqlalchemy import engine_from_config
 from sqlalchemy.exc import OperationalError
 from invisibleroads_posts import (
@@ -51,12 +51,11 @@ def configure_views(config):
 def handle_database_connection_error(context, request):
     response = request.response
     response.status_int = 500
-    LOG.error(DATABASE_ERROR_MESSAGE % context)
+    L.error(DATABASE_ERROR_MESSAGE % context)
     return response
 
 
-LOG = logging.getLogger(__name__)
-LOG.addHandler(logging.NullHandler())
+L = get_log(__name__)
 DATABASE_ERROR_MESSAGE = """%s
 
 Did you run the initialization script?
