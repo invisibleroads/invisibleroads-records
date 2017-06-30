@@ -64,6 +64,8 @@ class RecordMixin(object):
 
     @classmethod
     def get(Class, database, record_id):
+        if record_id is None:
+            return
         return database.query(Class).get(record_id)
 
     def __repr__(self):
