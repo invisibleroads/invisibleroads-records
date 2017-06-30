@@ -103,6 +103,15 @@ class CreationMixin(object):
         return arrow.get(self.creation_datetime).humanize()
 
 
+class ModificationMixin(object):
+
+    modification_datetime = Column(DateTime)
+
+    @property
+    def modification_when(self):
+        return arrow.get(self.modification_datetime).humanize()
+
+
 def get_database_session(database_engine, transaction_manager):
     DatabaseSession = sessionmaker(query_cls=CachingQuery)
     DatabaseSession.configure(bind=database_engine)
