@@ -79,7 +79,9 @@ class CachedRecordMixin(RecordMixin):
         if record_id is None:
             return
         record = Class.query_cache(database, record_id).get(record_id)
-        return database.merge(record)
+        if record is not None:
+            record = database.merge(record)
+        return record
 
     @classmethod
     def clear_cache(Class, database, record_id):
