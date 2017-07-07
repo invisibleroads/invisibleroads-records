@@ -92,8 +92,7 @@ class CachedRecordMixin(RecordMixin):
         return database.query(Class).options(FromCache(cache_key='%s.id=%s' % (
             Class.__name__, record_id)))
 
-    def update(self, database):
-        database.add(self)
+    def update_cache(self, database):
         self.__class__.clear_cache(database, self.id)
 
 
