@@ -47,7 +47,7 @@ class RecordMixin(object):
             count += 1
         else:
             raise InvisibleRoadsRecordsError(
-                'could not get unique record (%s)' % Class.__tablename__)
+                'could not get unique record for ' + Class.__tablename__)
         return record
 
     @classmethod
