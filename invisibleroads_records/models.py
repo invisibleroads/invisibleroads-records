@@ -1,6 +1,7 @@
 import arrow
 from datetime import datetime
 from invisibleroads_macros.security import make_random_string
+from invisibleroads_posts.models import get_record_id
 from pyramid.httpexceptions import HTTPNotFound
 from sqlalchemy import Column
 from sqlalchemy.exc import IntegrityError
@@ -53,9 +54,7 @@ class RecordMixin(object):
     @classmethod
     def get_from(Class, request, record_id=None):
         key = Class.__tablename__ + '_id'
-        if not record_id:
-            matchdict = request.matchdict
-            record_id = matchdict[key]
+        record_id = get_record_id(request, key)
         database = request.database
         record = Class.get(database, record_id)
         if not record:
