@@ -1,5 +1,6 @@
 import arrow
 from datetime import datetime
+from invisibleroads_macros.timestamp import get_timestamp
 from invisibleroads_macros.security import make_random_string
 from invisibleroads_posts.models import get_record_id
 from pyramid.httpexceptions import HTTPNotFound
@@ -100,6 +101,10 @@ class CreationMixin(object):
     creation_datetime = Column(DateTime, default=datetime.utcnow)
 
     @property
+    def creation_timestamp(self):
+        return get_timestamp(self.creation_datetime)
+
+    @property
     def creation_when(self):
         return arrow.get(self.creation_datetime).humanize()
 
@@ -107,6 +112,10 @@ class CreationMixin(object):
 class ModificationMixin(object):
 
     modification_datetime = Column(DateTime)
+
+    @property
+    def modification_timestamp(self):
+        return get_timestamp(self.modification_datetime)
 
     @property
     def modification_when(self):
