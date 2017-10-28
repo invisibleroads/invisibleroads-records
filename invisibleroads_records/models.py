@@ -55,7 +55,8 @@ class RecordMixin(object):
     @classmethod
     def get_from(Class, request, record_id=None):
         key = Class.__tablename__ + '_id'
-        record_id = get_record_id(request, key)
+        if record_id is None:
+            record_id = get_record_id(request, key)
         database = request.database
         record = Class.get(database, record_id)
         if not record:
