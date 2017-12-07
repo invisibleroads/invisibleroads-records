@@ -109,6 +109,10 @@ class CreationMixin(object):
     def creation_when(self):
         return arrow.get(self.creation_datetime).humanize()
 
+    @classmethod
+    def get_datetime(Class):
+        return Class.creation_datetime
+
 
 class ModificationMixin(object):
 
@@ -121,6 +125,10 @@ class ModificationMixin(object):
     @property
     def modification_when(self):
         return arrow.get(self.modification_datetime).humanize()
+
+    @classmethod
+    def get_datetime(Class):
+        return Class.modification_datetime
 
 
 def get_database_session(database_engine, transaction_manager):
