@@ -3,11 +3,11 @@ from invisibleroads_macros.log import get_log
 from invisibleroads_posts import (
     InvisibleRoadsConfigurator, add_routes_for_fused_assets)
 from invisibleroads_posts.libraries.cache import configure_cache
-from sqlalchemy import engine_from_config
 from sqlalchemy.exc import OperationalError
 
+from .constants import RECORD_ID_LENGTH
 from .libraries.cache import SQLALCHEMY_CACHE
-from .models import get_database_session, CLASS_REGISTRY
+from .models import CLASS_REGISTRY
 
 
 def main(global_config, **settings):
@@ -21,27 +21,21 @@ def main(global_config, **settings):
 def includeme(config):
     configure_settings(config)
     configure_cache(config, SQLALCHEMY_CACHE, 'server_cache.sqlalchemy.')
-    configure_database(config)
+    config.include('.models')
     configure_views(config)
 
 
 def configure_settings(config, prefix='invisibleroads_records.'):
-    settings = config.registry.settings
+    settings = config.get_settings()
     set_default(
         settings, 'sqlalchemy.url', 'sqlite:///%s/database.sqlite' % settings[
             'data.folder'])
     for class_name, Class in CLASS_REGISTRY.items():
         if class_name.startswith('_'):
             continue
-        set_default(settings, Class.__tablename__ + '.id.length', 32, int)
-
-
-def configure_database(config):
-    settings = config.registry.settings
-    database_engine = engine_from_config(settings, 'sqlalchemy.')
-    config.add_request_method(lambda request: get_database_session(
-        database_engine, request.tm), 'database', reify=True)
-    config.include('pyramid_tm')
+        key = Class.__tablename__ + '.id.length'
+        value = set_default(settings, key, RECORD_ID_LENGTH, int)
+        setattr(Class, 'id_length', value)
 
 
 def configure_views(config):
