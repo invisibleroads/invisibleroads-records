@@ -1,10 +1,13 @@
 import transaction
 from pytest import fixture
-from sqlalchemy import engine_from_config
 from webtest import TestApp
 
 from invisibleroads_records import main as get_app
-from invisibleroads_records.models import Base, get_database_session
+from invisibleroads_records.models import (
+    Base,
+    define_get_database_session,
+    get_database_engine,
+    get_transaction_manager_session)
 
 
 @fixture
@@ -14,14 +17,21 @@ def records_website(records_request):
 
 
 @fixture
-def records_request(posts_request, website_config):
-    settings = website_config.registry.settings
-    database_engine = engine_from_config(settings)
-    Base.metadata.create_all(database_engine)
+def records_request(posts_request, website_config, db):
     records_request = posts_request
-    records_request.database = get_database_session(
-        database_engine, transaction.manager)
+    records_request.db = db
     yield records_request
+
+
+@fixture
+def db(config):
+    settings = config.get_settings()
+    database_engine = get_database_engine(settings)
+    Base.metadata.create_all(database_engine)
+    get_database_session = define_get_database_session(database_engine)
+    database_session = get_transaction_manager_session(
+        get_database_session, transaction.manager)
+    yield database_session
     transaction.abort()
     Base.metadata.drop_all(database_engine)
 
