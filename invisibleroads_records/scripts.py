@@ -1,8 +1,7 @@
 from invisibleroads.scripts import ConfigurableScript
-from pyramid.paster import get_appsettings, setup_logging
-from sqlalchemy import engine_from_config
+from pyramid.paster import bootstrap, setup_logging
 
-from .models import Base
+from .models import Base, get_database_engine
 
 
 class InitializeRecordsScript(ConfigurableScript):
@@ -12,6 +11,8 @@ class InitializeRecordsScript(ConfigurableScript):
     def run(self, args):
         configuration_path = args.configuration_path
         setup_logging(configuration_path)
-        settings = get_appsettings(configuration_path)
-        database_engine = engine_from_config(settings)
+        with bootstrap(configuration_path) as env:
+            request = env['request']
+            settings = request.registry.settings
+            database_engine = get_database_engine(settings)
         Base.metadata.create_all(database_engine)

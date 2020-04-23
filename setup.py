@@ -42,7 +42,7 @@ DESCRIPTION = '\n\n'.join(open(join(FOLDER, x)).read().strip() for x in [
 
 setup(
     name='invisibleroads-records',
-    version='0.5.0',
+    version='0.5.1',
     description='Web application database',
     long_description=DESCRIPTION,
     long_description_content_type='text/markdown',
