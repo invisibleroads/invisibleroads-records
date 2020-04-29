@@ -11,7 +11,7 @@ from sqlalchemy.schema import MetaData
 from sqlalchemy.types import DateTime, String
 from zope.sqlalchemy import register as register_transaction_listener
 
-from .constants import RECORD_ID_LENGTH, RECORD_RETRY_COUNT
+from .constants import NAMING_CONVENTION, RECORD_ID_LENGTH, RECORD_RETRY_COUNT
 from .exceptions import InvisibleRoadsRecordsError
 
 
@@ -110,10 +110,4 @@ def get_transaction_manager_session(get_database_session, transaction_manager):
 CLASS_REGISTRY = {}
 metadata = Base = declarative_base(
     class_registry=CLASS_REGISTRY,
-    metadata=MetaData(naming_convention={
-        'ix': 'ix_%(column_0_label)s',
-        'uq': 'uq_%(table_name)s_%(column_0_name)s',
-        'ck': 'ck_%(table_name)s_%(constraint_name)s',
-        'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
-        'pk': 'pk_%(table_name)s',
-    }))
+    metadata=MetaData(naming_convention=NAMING_CONVENTION))
