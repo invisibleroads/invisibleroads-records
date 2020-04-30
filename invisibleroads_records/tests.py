@@ -1,5 +1,7 @@
 import transaction
-from invisibleroads_posts.tests import settings as posts_settings
+from invisibleroads_posts.tests import (
+    application_config as posts_application_config,
+    settings as posts_settings)
 from pytest import fixture
 
 from .models import (
@@ -16,7 +18,7 @@ def records_request(posts_request, application_config, db):
 
 @fixture
 def application_config(config):
-    config.include('invisibleroads_posts')
+    config = next(posts_application_config(config))
     config.include('invisibleroads_records')
     yield config
 
@@ -36,6 +38,6 @@ def db(config):
 
 @fixture
 def settings(data_folder):
-    settings = posts_settings()
+    settings = next(posts_settings())
     settings['sqlalchemy.url'] = 'sqlite://'
-    return settings
+    yield settings
