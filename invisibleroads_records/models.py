@@ -91,7 +91,11 @@ def includeme(config):
 
 
 def get_database_engine(settings, prefix='sqlalchemy.'):
-    return engine_from_config(settings, prefix)
+    DatabaseExtensions = settings.pop(prefix + 'extensions')
+    engine = engine_from_config(settings, prefix)
+    for DatabaseExtension in DatabaseExtensions:
+        DatabaseExtension(settings, prefix).configure(engine)
+    return engine
 
 
 def define_get_database_session(database_engine):
