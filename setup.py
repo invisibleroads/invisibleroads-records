@@ -14,16 +14,10 @@ APPLICATION_CLASSIFIERS = [
     'License :: OSI Approved :: MIT License',
 ]
 APPLICATION_REQUIREMENTS = [
+    # architecture
+    'invisibleroads-posts >= 0.7.4',
     # web
     'pyramid',
-    # test
-    'pytest',
-    # architecture
-    'invisibleroads-posts',
-    # shortcut
-    'invisibleroads-macros-configuration',
-    'invisibleroads-macros-log',
-    'invisibleroads-macros-security',
     # database
     'alembic',
     'pyramid-retry',
@@ -31,6 +25,12 @@ APPLICATION_REQUIREMENTS = [
     'sqlalchemy',
     'transaction',
     'zope.sqlalchemy',
+    # test
+    'pytest',
+    # shortcut
+    'invisibleroads-macros-configuration >= 1.0.3',
+    'invisibleroads-macros-log >= 1.0.2',
+    'invisibleroads-macros-security >= 1.0.0',
 ]
 TEST_REQUIREMENTS = [
     'pytest-cov',
