@@ -15,7 +15,7 @@ APPLICATION_CLASSIFIERS = [
 ]
 APPLICATION_REQUIREMENTS = [
     # architecture
-    'invisibleroads-posts >= 0.7.5',
+    'invisibleroads-posts >= 0.7.6',
     # web
     'pyramid',
     # database
@@ -28,7 +28,7 @@ APPLICATION_REQUIREMENTS = [
     # test
     'pytest',
     # shortcut
-    'invisibleroads-macros-configuration >= 1.0.4',
+    'invisibleroads-macros-configuration >= 1.0.5',
     'invisibleroads-macros-log >= 1.0.2',
     'invisibleroads-macros-security >= 1.0.0',
 ]
