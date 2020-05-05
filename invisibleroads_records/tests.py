@@ -1,7 +1,4 @@
 import transaction
-from invisibleroads_posts.tests import (
-    application_config as posts_application_config,
-    settings as posts_settings)
 from pytest import fixture
 
 from .models import (
@@ -10,23 +7,23 @@ from .models import (
 
 
 @fixture
-def records_request(posts_request, application_config, db):
+def records_request(posts_request, records_config, database):
     records_request = posts_request
-    records_request.db = db
+    records_request.db = database
     yield records_request
 
 
 @fixture
-def application_config(config):
-    config = next(posts_application_config(config))
-    config.include('invisibleroads_records')
-    yield config
+def records_config(posts_config):
+    posts_config.include('invisibleroads_records')
+    yield posts_config
 
 
 @fixture
-def db(config):
-    settings = config.get_settings()
-    database_engine = get_database_engine(settings)
+def database(records_settings, database_extensions):
+    database_engine = get_database_engine(records_settings)
+    for Extension in database_extensions:
+        Extension(records_settings).configure(database_engine)
     Base.metadata.create_all(database_engine)
     get_database_session = define_get_database_session(database_engine)
     database_session = get_transaction_manager_session(
@@ -37,7 +34,11 @@ def db(config):
 
 
 @fixture
-def settings(data_folder):
-    settings = next(posts_settings())
-    settings['sqlalchemy.url'] = 'sqlite://'
-    yield settings
+def database_extensions():
+    return []
+
+
+@fixture
+def records_settings(posts_settings):
+    posts_settings['sqlalchemy.url'] = 'sqlite://'
+    yield posts_settings
