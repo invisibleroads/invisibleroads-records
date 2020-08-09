@@ -19,4 +19,4 @@ def configure_settings(config):
         setattr(Class, 'id_length', value)
     set_default(
         settings, 'sqlalchemy.url',
-        'sqlite:///%s/database.sqlite' % settings['data.folder'])
+        'sqlite:///%s/database.sqlite' % settings.get('data.folder', '.'))
