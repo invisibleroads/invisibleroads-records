@@ -1,6 +1,6 @@
 from invisibleroads_macros_configuration import set_default
 
-from .constants import RECORD_ID_LENGTH, S
+from .constants import RECORD_ID_LENGTH
 from .models import CLASS_REGISTRY
 
 
@@ -17,6 +17,6 @@ def configure_settings(config):
         key = Class.__tablename__ + '.id.length'
         value = set_default(settings, key, RECORD_ID_LENGTH, int)
         setattr(Class, 'id_length', value)
-    S.set(
-        settings, '', 'sqlalchemy.url',
+    set_default(
+        settings, 'sqlalchemy.url',
         'sqlite:///%s/database.sqlite' % settings.get('data.folder', '.'))
