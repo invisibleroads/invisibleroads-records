@@ -15,7 +15,8 @@ APPLICATION_CLASSIFIERS = [
 ]
 APPLICATION_REQUIREMENTS = [
     # architecture
-    'invisibleroads-posts >= 0.7.7',
+    'invisibleroads >= 0.3.0',
+    'invisibleroads-posts >= 0.7.10',
     # web
     'pyramid',
     # database
@@ -28,9 +29,9 @@ APPLICATION_REQUIREMENTS = [
     # test
     'pytest',
     # shortcut
-    'invisibleroads-macros-configuration >= 1.0.5',
+    'invisibleroads-macros-configuration >= 1.0.6',
     'invisibleroads-macros-log >= 1.0.2',
-    'invisibleroads-macros-security >= 1.0.0',
+    'invisibleroads-macros-security >= 1.0.1',
 ]
 TEST_REQUIREMENTS = [
     'pytest-cov',
@@ -42,7 +43,7 @@ DESCRIPTION = '\n\n'.join(open(join(FOLDER, x)).read().strip() for x in [
 
 setup(
     name='invisibleroads-records',
-    version='0.5.6',
+    version='0.5.7',
     description='Web application database defaults',
     long_description=DESCRIPTION,
     long_description_content_type='text/markdown',

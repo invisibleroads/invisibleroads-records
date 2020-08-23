@@ -9,7 +9,7 @@ class InitializeRecordsScript(ConfigurableScript):
 
     priority = 20
 
-    def run(self, args):
+    def run(self, args, argv):
         settings = load_bootstrapped_settings(args.configuration_path)
         if 'sqlalchemy.url' not in settings:
             return
