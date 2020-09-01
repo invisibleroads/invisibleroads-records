@@ -15,11 +15,11 @@ APPLICATION_CLASSIFIERS = [
 ]
 APPLICATION_REQUIREMENTS = [
     # architecture
-    'invisibleroads-posts >= 0.7.8',
+    'invisibleroads-posts >= 0.7.13',
     # web
     'pyramid',
     # database
-    'alembic',
+    # 'alembic',
     'pyramid-retry',
     'pyramid-tm',
     'sqlalchemy',
@@ -42,7 +42,7 @@ DESCRIPTION = '\n\n'.join(open(join(FOLDER, x)).read().strip() for x in [
 
 setup(
     name='invisibleroads-records',
-    version='0.5.7',
+    version='0.5.7.1',
     description='Web application database defaults',
     long_description=DESCRIPTION,
     long_description_content_type='text/markdown',
