@@ -78,18 +78,6 @@ class ModificationMixin(object):
         return get_timestamp(self.modification_datetime)
 
 
-def includeme(config):
-    settings = config.get_settings()
-    settings['tm.manager_hook'] = 'pyramid_tm.explicit_manager'
-    config.include('pyramid_tm')
-    config.include('pyramid_retry')
-    database_engine = get_database_engine(settings)
-    get_database_session = define_get_database_session(database_engine)
-    config.add_request_method(
-        lambda r: get_transaction_manager_session(get_database_session, r.tm),
-        'db', reify=True)
-
-
 def get_database_engine(settings, prefix='sqlalchemy.'):
     engine = engine_from_config(settings, prefix)
     for DatabaseExtension in settings.get('database.extensions', []):
