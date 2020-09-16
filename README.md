@@ -1,6 +1,6 @@
 # InvisibleRoads Records
 
-Records add database functionality.
+This package adds database functionality to your pyramid web service.
 
 ## Use
 
