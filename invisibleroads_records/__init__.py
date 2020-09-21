@@ -9,7 +9,6 @@ from .models import (
 
 
 def includeme(config):
-    config.include('invisibleroads_posts')
     configure_settings(config)
     configure_models(config)
 
