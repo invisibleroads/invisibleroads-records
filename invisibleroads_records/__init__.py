@@ -1,11 +1,12 @@
 from invisibleroads_macros_configuration import set_default
+from invisibleroads_posts.routines.configuration import set_attribute
 
 from .constants import RECORD_ID_LENGTH
 from .models import (
     define_get_database_session,
     get_database_engine,
-    get_transaction_manager_session,
-    CLASS_REGISTRY)
+    get_transaction_manager_session)
+from .variables import RECORDS_REGISTRY
 
 
 def includeme(config):
@@ -15,12 +16,8 @@ def includeme(config):
 
 def configure_settings(config):
     settings = config.get_settings()
-    for class_name, Class in CLASS_REGISTRY.items():
-        if class_name.startswith('_'):
-            continue
-        key = Class.__tablename__ + '.id.length'
-        value = set_default(settings, key, RECORD_ID_LENGTH, int)
-        setattr(Class, 'id_length', value)
+    set_attribute(
+        settings, RECORDS_REGISTRY, 'id.length', RECORD_ID_LENGTH, int)
     set_default(
         settings, 'sqlalchemy.url',
         'sqlite:///%s/database.sqlite' % settings.get('data.folder', '.'))

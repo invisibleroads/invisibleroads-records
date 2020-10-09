@@ -13,6 +13,7 @@ from zope.sqlalchemy import register as register_transaction_listener
 
 from .constants import NAMING_CONVENTION, RECORD_ID_LENGTH, RECORD_RETRY_COUNT
 from .exceptions import InvisibleRoadsRecordsError
+from .variables import RECORDS_REGISTRY
 
 
 class RecordMixin(object):
@@ -98,7 +99,6 @@ def get_transaction_manager_session(get_database_session, transaction_manager):
     return database_session
 
 
-CLASS_REGISTRY = {}
 metadata = Base = declarative_base(
-    class_registry=CLASS_REGISTRY,
+    class_registry=RECORDS_REGISTRY,
     metadata=MetaData(naming_convention=NAMING_CONVENTION))
