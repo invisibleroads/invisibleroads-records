@@ -42,7 +42,7 @@ class RecordMixin(object):
 
     @classmethod
     def get_from(Class, request, record_id=None):
-        key = Class.__tablename__ + '_id'
+        key = Class.__tablename__ + 'Id'
         if record_id is None:
             record_id = get_value(request, key)
         database = request.database
