@@ -36,8 +36,8 @@ class RecordMixin(object):
                 break
             count += 1
         else:
-            raise InvisibleRoadsRecordsError(
-                f'could not get unique {Class.__tablename__}.id')
+            raise InvisibleRoadsRecordsError({
+                Class.__tablename__: 'could not get unique id'})
         return record
 
     @classmethod
@@ -48,7 +48,7 @@ class RecordMixin(object):
         database = request.database
         record = Class.get(database, record_id)
         if not record:
-            raise HTTPNotFound({key: 'bad'})
+            raise HTTPNotFound({key: 'is bad'})
         return record
 
     @classmethod
@@ -58,7 +58,10 @@ class RecordMixin(object):
         return database.query(Class).get(record_id)
 
     def __repr__(self):
-        return f'<{self.__class__.__name__}(id={self.id})>'
+        descriptive_text = ', '.join([
+            f'id={repr(self.id)}',
+        ])
+        return f'<{self.__class__.__name__}({descriptive_text})>'
 
 
 class CreationMixin(object):
