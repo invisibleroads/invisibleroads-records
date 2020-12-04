@@ -45,8 +45,8 @@ class RecordMixin(object):
         key = Class.__tablename__ + 'Id'
         if record_id is None:
             record_id = get_value(request, key)
-        database = request.database
-        record = Class.get(database, record_id)
+        db = request.db
+        record = Class.get(db, record_id)
         if not record:
             raise HTTPNotFound({key: 'is bad'})
         return record
